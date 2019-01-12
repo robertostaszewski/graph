@@ -1,9 +1,11 @@
 package pwta.eti.pg.graph;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +27,8 @@ public class ParamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_param);
 
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
         final EditText aText = findViewById(R.id.A);
         final EditText bText = findViewById(R.id.B);
         final EditText cText = findViewById(R.id.C);
@@ -39,20 +43,6 @@ public class ParamActivity extends AppCompatActivity {
             intent.putExtra(B_VALUE, bValue);
             intent.putExtra(C_VALUE, cValue);
             startActivityForResult(intent, 1);
-        });
-
-        Button saveButton = findViewById(R.id.save);
-        saveButton.setOnClickListener(click -> {
-            try {
-                View rootView = getWindow().getDecorView().getRootView();
-                Bitmap screenShot = getScreenShot(rootView);
-                store(screenShot, "hard.png");
-
-                Toast.makeText(this, "file has been write", Toast.LENGTH_SHORT).show();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         });
     }
 
@@ -76,30 +66,6 @@ public class ParamActivity extends AppCompatActivity {
             aText.setText(String.valueOf(aValue));
             bText.setText(String.valueOf(bValue));
             cText.setText(String.valueOf(cValue));
-        }
-    }
-
-    public static Bitmap getScreenShot(View view) {
-        View screenView = view.getRootView();
-        screenView.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(screenView.getDrawingCache());
-        screenView.setDrawingCacheEnabled(false);
-        return bitmap;
-    }
-
-    public static void store(Bitmap bm, String fileName) {
-        final String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File dir = new File(dirPath);
-        if (!dir.exists())
-            dir.mkdirs();
-        File file = new File(dirPath, fileName);
-        try {
-            FileOutputStream fOut = new FileOutputStream(file);
-            bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-            fOut.flush();
-            fOut.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

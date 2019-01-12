@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Toast;
 
@@ -128,8 +130,6 @@ public class GraphView extends View {
                 b = dx / xScale * 2 * a + b;
                 c = dy + c;
                 break;
-
-
         }
 
         mPreviousX = x;
