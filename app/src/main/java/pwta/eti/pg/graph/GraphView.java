@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
@@ -108,4 +110,32 @@ public class GraphView extends View {
         return c;
     }
 
+
+    private float mPreviousX;
+    private float mPreviousY;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        float x = e.getX();
+        float y = e.getY();
+
+        switch (e.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+
+                float dx = x - mPreviousX;
+                float dy = y - mPreviousY;
+
+                b = dx / xScale * 2 * a + b;
+                c = dy + c;
+                break;
+
+
+        }
+
+        mPreviousX = x;
+        mPreviousY = y;
+
+        invalidate();
+        return true;
+    }
 }
